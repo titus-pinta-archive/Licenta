@@ -38,7 +38,6 @@ class Nesterov(Optimizers.optimize.Optimizer):
         if accuracy:
             acc = acc_function(x)
             condition_params["acc"] = acc
-            print(acc)
 
         # return initial conditions
         self.add_to_return(x=x, g=g, f=f)
@@ -68,6 +67,10 @@ class Nesterov(Optimizers.optimize.Optimizer):
                     condition_params["f"] = f
             else:
                 g = df(y)
+
+            if accuracy:
+                acc = acc_function(x)
+                condition_params["acc"] = acc
 
             # update position
             x_ant = x
