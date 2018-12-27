@@ -48,9 +48,6 @@ class Cost:
         self.cost_derivative = cost_derivative
 
 
-# TODO here here cross entropy
-# TODO regularization
-
 sigma_activation = Activation(sigmoid, sigmoid_prime)
 l2_cost = Cost(l2_cost_function, l2_cost_derivative)
 cross_entropy_cost = Cost(cross_entropy_cost_function, cross_entropy_cost_derivative)
@@ -120,7 +117,7 @@ class Network(object):
             nabla_b[-l] = np.sum(delta, 1).reshape(nabla_b[-l].shape) / n
             nabla_w[-l] = (delta @ activations[-l - 1].T) / n
 
-        nabla_w = [n - self.l2_regularization * w for n, w in zip(nabla_w, weights)]
+        nabla_w = [n + self.l2_regularization * w for n, w in zip(nabla_w, weights)]
 
         return self.cost_function(activations[-1], y), nabla_w, nabla_b
 

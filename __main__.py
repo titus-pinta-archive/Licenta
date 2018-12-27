@@ -40,10 +40,7 @@ appender = None
 # t = TestProblems.problem.Problem.from_file("nesterov.sv")
 # print(t.result.data)
 
-
-# TODO Cross entropy
-# TODO l2 regularization
-# TODO Redo all optimizers with new stuff
+# TODO l1 regularization
 # TODO Restart nesterov 3 metode
 # TODO under damped nesterov
 # TODO adaptative dampping
