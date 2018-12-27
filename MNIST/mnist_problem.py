@@ -11,15 +11,15 @@ class MNISTProblem:
                  eps=10 ** (-5), cond_options=None, optim_options=None, disp="print", name=None, ret_info="iter",
                  disp_info="iter norminf", iter_print_gap=1, test_accuracy=0, iter_stop=2500, eta=2,
                  activation=MachineLearning.network.sigma_activation, net=None,
-                 cost=MachineLearning.network.l2_cost):
+                 cost=MachineLearning.network.cross_entropy_cost, l2_regularization=0):
         self.size_train_data = size_train_data
 
         self.x_tdata, self.y_tdata = MNIST.mnist_loader.load_train_data(size_train_data)
         self.name = name
 
         self.layout = [784] + hidden_layers + [10]
-        self.net = MachineLearning.network.Network(self.layout, activation=activation, cost=cost,
-                                                   name=name) if net is None else net
+        self.net = MachineLearning.network.Network(self.layout, activation=activation, cost=cost, name=name,
+                                                   l2_regularization=l2_regularization) if net is None else net
 
         if "acc" == cond:
             if cond_options is not None:
