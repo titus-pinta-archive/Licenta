@@ -100,14 +100,16 @@ class Problem:
             raise ValueError("Undefined Optimizer")
 
     def solve(self):
-        self.optim_options = {} if self.optim_options is None else self.optim_options
         ret_list = self.optim.optimize()
+
         if "error" in ret_list.keys():
             print("Optimizer failed to converge in: " + str(ret_list["it"]))
             del ret_list["error"]
+        else:
+            print("Problem solved")
+
 
         self.result = result.ResultData(**ret_list)
-        print("Problem solved")
 
     @classmethod
     def from_result(cls, r, name=""):

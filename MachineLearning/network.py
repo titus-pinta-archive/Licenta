@@ -7,6 +7,10 @@ import dill as pickle
 import re
 
 
+def square_of_2_norm(x):
+    return x.T @ x
+
+
 def sigmoid(z):
     return 1.0 / (1.0 + np.exp(-z))
 
@@ -23,6 +27,14 @@ def l2_cost_function(output_activations, y):
     return np.linalg.norm(output_activations - y) ** 2 / (2 * y.shape[1])
 
 
+def cross_entropy_cost_derivative(output_activations, y):
+    return (1 - y) / (1 - output_activations) - y / output_activations
+
+
+def cross_entropy_cost_function(output_activations, y):
+    return -np.average(np.sum(y * np.log(output_activations) + (1 - y) * np.log(1 - output_activations), 0))
+
+
 class Activation:
     def __init__(self, activation_function, activation_derivative):
         self.activation_function = activation_function
@@ -35,20 +47,30 @@ class Cost:
         self.cost_derivative = cost_derivative
 
 
+# TODO here here cross entropy
+# TODO regularization
+
 sigma_activation = Activation(sigmoid, sigmoid_prime)
 l2_cost = Cost(l2_cost_function, l2_cost_derivative)
+cross_entropy_cost = Cost(cross_entropy_cost_function, cross_entropy_cost_derivative)
 
 
 class Network(object):
 
-    def __init__(self, sizes, activation=sigma_activation, cost=l2_cost, name=None):
+    def __init__(self, sizes, activation=sigma_activation, cost=cross_entropy_cost, l2_regularization=0, name=None,
+                 weights=None, biases=None):
         self.activation = activation.activation_function
         self.activation_derivative = activation.activation_derivative
         self.cost_derivative = cost.cost_derivative
         self.cost_function = cost.cost_function
         self.num_layers = len(sizes)
         self.sizes = sizes
-        self.weights, self.biases = self.random_weights_and_biases()
+
+        w, b = self.random_weights_and_biases()
+        self.weights = w if weights is None else weights
+        self.biases = b if biases is None else biases
+
+        self.l2_regularization = l2_regularization
 
         self.name = name if name else re.sub("[-.:; ]", "_", str(datetime.datetime.now()))
 
@@ -96,6 +118,8 @@ class Network(object):
 
             nabla_b[-l] = np.sum(delta, 1).reshape(nabla_b[-l].shape) / n
             nabla_w[-l] = (delta @ activations[-l - 1].T) / n
+
+        nabla_w = [n - self.l2_regularization * w for n, w in zip(nabla_w, weights)]
 
         return self.cost_function(activations[-1], y), nabla_w, nabla_b
 
