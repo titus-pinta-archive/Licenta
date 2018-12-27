@@ -113,3 +113,20 @@ class Network(object):
 
     def representation(self):
         return pickle.dumps(self)
+
+    def from_vector(self, x):
+        weights = []
+        for w in self.weights:
+            weights.append(np.reshape(x[:w.shape[0] * w.shape[1]], w.shape))
+            x = x[w.shape[0] * w.shape[1]:]
+        biases = []
+        for b in self.biases:
+            biases.append(np.reshape(x[:b.shape[0] * b.shape[1]], b.shape))
+            x = x[b.shape[0] * b.shape[1]:]
+        return weights, biases
+
+    def to_vector(self, weights=None, biases=None):
+        weights = weights if weights is not None else self.weights
+        biases = biases if biases is not None else self.biases
+
+        return np.concatenate([w.flatten() for w in weights] + [b.flatten() for b in biases])

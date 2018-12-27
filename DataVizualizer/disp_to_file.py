@@ -9,7 +9,7 @@ class DisplayFile:
     def __init__(self, path, print_to_screen_info="iter"):
         self.append = FileIO.file_io.Appender(path)
 
-        def write(it=None, g=None, x=None, ginf=None, gl2=None, f=None):
+        def write(it=None, g=None, x=None, ginf=None, gl2=None, f=None, acc=None):
 
             _dict = {"g": g, "x": x, "f": f}
             self.append.append(pickle.dumps(_dict) + bytearray("\n\n --NEW ENTRY-- \n\n", "ascii"))
@@ -32,6 +32,9 @@ class DisplayFile:
 
             if "obj" in print_to_screen_info and f is not None:
                 disp_str = disp_str + "    function: " + str(f) + "\n"
+
+            if "acc" in print_to_screen_info and acc is not None:
+                disp_str = disp_str + "    accuracy: " + str(acc) + "\n"
 
             if disp_str:
                 print(disp_str)

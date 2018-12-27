@@ -30,21 +30,10 @@ class NetworkProblem:
         self.net.name = self.name
 
     def from_vector(self, x):
-        weights = []
-        for w in self.net.weights:
-            weights.append(np.reshape(x[:w.shape[0] * w.shape[1]], w.shape))
-            x = x[w.shape[0] * w.shape[1]:]
-        biases = []
-        for b in self.net.biases:
-            biases.append(np.reshape(x[:b.shape[0] * b.shape[1]], b.shape))
-            x = x[b.shape[0] * b.shape[1]:]
-        return weights, biases
+        return self.net.from_vector(x)
 
     def to_vector(self, weights=None, biases=None):
-        weights = weights if weights is not None else self.net.weights
-        biases = biases if biases is not None else self.net.biases
-
-        return np.concatenate([w.flatten() for w in weights] + [b.flatten() for b in biases])
+        return self.net.to_vector(weights=weights, biases=biases)
 
     def construct_obj_function_handler(self):
         def obj_func(x):

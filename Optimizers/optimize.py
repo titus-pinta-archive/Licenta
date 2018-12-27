@@ -49,6 +49,9 @@ class Optimizer:
 
         self.condition = condition
 
+        self.accuracy = False
+        self.accuracy_function = None
+
         if "iter" in ret_info:
             self.ret_state = self.ret_state | 1
 
@@ -81,10 +84,17 @@ class Optimizer:
             if "obj" in disp_info:
                 self.disp_state = self.disp_state | 32
 
+            if "acc" in disp_info:
+                self.disp_state = self.disp_state | 64
+                self.accuracy = True
+                self.accuracy_function = condition_params["acc"]
+
         if condition_params is None:
             self.condition_params = {}
+        else:
+            self.condition_params = condition_params
 
-    def print_step(self, it_number, x=None, g=None, f=None):
+    def print_step(self, it_number, x=None, g=None, f=None, acc=None):
         disp_str = ""
         disp_dict = {}
 
@@ -111,6 +121,10 @@ class Optimizer:
         if self.disp_state & 32:
             disp_str = disp_str + "    function: " + str(f) + "\n"
             disp_dict["f"] = f
+
+        if self.disp_state & 64:
+            disp_str = disp_str + "    accuracy: " + str(acc) + "\n"
+            disp_dict["acc"] = acc
 
         if it_number % self.iter_print_gap == 0:
             if self.disp is None:

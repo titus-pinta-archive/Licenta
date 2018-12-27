@@ -49,5 +49,11 @@ class Conditions:
 
             self.cond = xinf_cond
 
+        elif cond == "acc":
+            def acc_cond(_, __, ___, acc):
+                return acc > eps
+
+            self.cond = acc_cond
+
         else:
             raise ValueError("Invalid condition type")

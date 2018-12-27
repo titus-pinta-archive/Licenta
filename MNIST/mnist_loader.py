@@ -17,7 +17,6 @@ def load_mnist(num_samples, target, mode="numpy"):
         raise ValueError("Invalid return mode")
 
     os.chdir("Resources")
-
     print("Loading MNIST " + target + ": {} samples".format("all" if num_samples == 0 else num_samples))
 
     print("Loading labels")
