@@ -30,13 +30,15 @@ appender = DataVizualizer.disp_to_file.DisplayFile("nesterov.sv", print_to_scree
 
 
 n = MachineLearning.network.Network.load_from_file("start_net.netsv")
-mpb = MNIST.mnist_problem.MNISTProblem(eta=2.5, eps=10 ** (-5), optim_options={"gamma": 0.9}, net=n,
+n.name = "nesterov"
+mpb = MNIST.mnist_problem.MNISTProblem(eta=2.5, eps=10 ** (-5), optim_options={"gamma": 0.9}, iter_stop=5000,
                                        optim="Nesterov", name="nesterov", disp=appender.disp,
                                        disp_info="iter trace grad norminf obj", cond="gradinf")
 
-print(mpb.optimize())
-mpb.save_network()
-appender = None
+# #print(mpb.optimize())
+# mpb.save_network()
+# appender = None
+
 
 #t = TestProblems.problem.Problem.from_file("nesterov.sv")
 #print(t.result.data)
@@ -47,3 +49,4 @@ appender = None
 # TODO adaptative dampping
 # TODO start from small constant nesterov
 # TODO beta n n / n+ 3 la alg cristi
+# TODO foloseste iterate mai des sa nu uiti
