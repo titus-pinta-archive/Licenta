@@ -26,13 +26,13 @@ import Optimizers.gradient_descent
 
 
 
-appender = DataVizualizer.disp_to_file.DisplayFile("nesterov.sv", print_to_screen_info="iter acc")
+appender = DataVizualizer.disp_to_file.DisplayFile("nesterov.sv", print_to_screen_info="iter acc norminf")
 
 
 n = MachineLearning.network.Network.load_from_file("start_net.netsv")
 n.name = "nesterov"
-mpb = MNIST.mnist_problem.MNISTProblem(eta=3, eps=0.7, optim_options={"gamma": 0.9}, iter_stop=500,
-                                       optim="Nesterov", name="nesterov", disp=appender.disp,
+mpb = MNIST.mnist_problem.MNISTProblem(eta=0.3, eps=0.7, optim_options={"gamma": 0.9}, iter_stop=500,
+                                       optim="ModNesterov", name="nesterov", disp=appender.disp,
                                        disp_info="iter trace grad norminf obj acc", cond="acc")
 
 print(mpb.optimize())
@@ -41,6 +41,7 @@ print(mpb.optimize())
 #t = TestProblems.problem.Problem.from_file("nesterov.sv")
 #print(t.result.data)
 
+# TODO l2 regularization
 # TODO Redo all optimizers with new stuff
 # TODO Restart nesterov 3 metode
 # TODO under damped nesterov

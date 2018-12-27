@@ -18,6 +18,9 @@ class ModNesterov(Optimizers.optimize.Optimizer):
 
         eta = self.eta
 
+        accuracy = self.accuracy
+        acc_function = self.accuracy_function
+
         condition_params = self.condition_params
         condition = self.condition
 
@@ -29,12 +32,16 @@ class ModNesterov(Optimizers.optimize.Optimizer):
             f = None
             g = df(x)
 
+        if accuracy:
+            acc = acc_function(x)
+            condition_params["acc"] = acc
+
         # return initial conditions
         self.add_to_return(x=x, g=g, f=f)
 
         # display initial conditions
         if iter_print_gap:
-            self.print_step(0, x=x, g=g, f=f)
+            self.print_step(0, x=x, g=g, f=f, acc=acc)
 
         # update position for first iteration
         it_number = 1
@@ -43,11 +50,11 @@ class ModNesterov(Optimizers.optimize.Optimizer):
 
         # display
         if iter_print_gap:
-            self.print_step(1, x=x, g=g, f=f)
+            self.print_step(1, x=x, g=g, f=f, acc=acc)
         self.add_to_return(x=x, g=g, f=f)
 
         # loop until the condition is met
-        while ~condition(x_ant, x, g, **condition_params):
+        while not condition(x_ant, x, g, **condition_params):
             it_number = it_number + 1
             y = x + (it_number / (it_number + 3)) * (x - x_ant)
 
@@ -58,6 +65,10 @@ class ModNesterov(Optimizers.optimize.Optimizer):
             else:
                 g = df(y)
 
+            if accuracy:
+                acc = acc_function(x)
+                condition_params["acc"] = acc
+
             # update position
             x_ant = x
             x = y - eta * g
@@ -67,7 +78,7 @@ class ModNesterov(Optimizers.optimize.Optimizer):
 
             # display
             if iter_print_gap:
-                self.print_step(it_number, x=x, g=g, f=f)
+                self.print_step(it_number, x=x, g=g, f=f, acc=acc)
 
             if it_number == iter_stop:
                 return {"error": True, "it": it_number, "x_min": x}

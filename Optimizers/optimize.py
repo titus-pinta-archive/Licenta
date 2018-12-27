@@ -157,3 +157,6 @@ class Optimizer:
             ret_dict["f"] = self.ret_func_list
 
         return ret_dict
+
+    def compute_gradient(self, x):
+        pass
