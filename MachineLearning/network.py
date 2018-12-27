@@ -28,11 +28,12 @@ def l2_cost_function(output_activations, y):
 
 
 def cross_entropy_cost_derivative(output_activations, y):
-    return (1.00000001 - y) / (1.00000001 - output_activations) - y / output_activations
+    return (1 - y) / (1.00000001 - output_activations) - y / (.00000001 + output_activations)
 
 
 def cross_entropy_cost_function(output_activations, y):
-    return -np.average(np.sum(y * np.log(output_activations) + (1.00000001 - y) * np.log(1.00000001 - output_activations), 0))
+    return -np.average(
+        np.sum(y * np.log(.00000001 + output_activations) + (1 - y) * np.log(1.00000001 - output_activations), 0))
 
 
 class Activation:
