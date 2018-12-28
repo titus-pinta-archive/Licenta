@@ -11,7 +11,7 @@ class DisplayFile:
 
         def write(it=None, g=None, x=None, ginf=None, gl2=None, f=None, acc=None):
 
-            _dict = {"g": g, "x": x, "f": f}
+            _dict = {"g": g, "x": x, "f": f, "acc": acc}
             self.append.append(pickle.dumps(_dict) + bytearray("\n\n --NEW ENTRY-- \n\n", "ascii"))
 
             disp_str = ""
