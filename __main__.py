@@ -27,15 +27,15 @@ import numpy as np
 # print(p.result.data["it"])
 
 
-appender = DataVizualizer.disp_to_file.DisplayFile("nesterov.sv", print_to_screen_info="iter acc norminf")
+#appender = DataVizualizer.disp_to_file.DisplayFile("nesterov.sv", print_to_screen_info="iter acc norminf")
 
 mpb = MNIST.mnist_problem.MNISTProblem(eta=0.5, eps=0.75, iter_stop=250, l2_regularization=0.05,
-                                       optim="ModNesterov", name="nesterov", disp=appender.disp,
-                                       disp_info="iter trace grad norminf obj acc", cond="acc")
+                                       optim="GD", name="nesterov", disp="print",
+                                       disp_info="iter  norminf acc", cond="acc")
 
 print(mpb.optimize())
 mpb.save_network()
-appender = None
+#appender = None
 
 n = MachineLearning.network.Network.load_from_file("nesterov.netsv")
 
