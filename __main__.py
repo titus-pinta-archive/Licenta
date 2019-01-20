@@ -9,18 +9,17 @@ import Optimizers.gradient_descent
 import numpy as np
 from PIL import Image
 
+# appender = DataVizualizer.disp_to_file.DisplayFile("nesterov.sv", print_to_screen_info="iter acc norminf")
 
-#appender = DataVizualizer.disp_to_file.DisplayFile("nesterov.sv", print_to_screen_info="iter acc norminf")
-
-mpb = MNIST.mnist_problem.MNISTProblem(eta=0.5, eps=0.75, iter_stop=250, l2_regularization=0.05,
-                                       optim="ModNesterov", name="nesterov", disp="print",
+mpb = MNIST.mnist_problem.MNISTProblem(eta=0.5, eps=0.75, iter_stop=250, l2_regularization=0.05, optim="ModNesterov",
+                                       name="nesterov", disp="print",
                                        disp_info="iter  norminf acc", cond="acc")
 
 print(mpb.optimize())
 mpb.save_network()
-#appender = None
+# appender = None
 
-#n = MachineLearning.network.Network.load_from_file("nesterov.netsv")
+# n = MachineLearning.network.Network.load_from_file("nesterov.netsv")
 n = mpb.net
 
 img = Image.open("Tests/test0.png")
@@ -56,17 +55,14 @@ print(9, np.argmax(n.feed_forward(np.array(img.getdata(), np.uint8).reshape((3, 
 
 ti, tl = MNIST.mnist_loader.load_test_data()
 img = Image.fromarray(np.array(ti.T[:][0].reshape((28, 28)) * 255, np.uint8))
-#img.save("train.png")
-#img.show()
+# img.save("train.png")
+# img.show()
 print(7, np.argmax(n.feed_forward(np.array(img.getdata(), np.uint8).reshape((1, 28, 28))[0].reshape(784, 1) / 255)))
 print(7, np.argmax(n.feed_forward(ti[:, 0].reshape((784, 1)))))
-
 
 arr1 = np.array(img.getdata(), np.uint8).reshape((1, 28, 28))[0].reshape(784, 1) / 255
 arr2 = ti[:, 0].reshape((784, 1))
 print(np.max(np.abs(arr1 - arr2)))
-
-
 
 # t = TestProblems.problem.Problem.from_file("nesterov.sv")
 # print(t.result.data)
