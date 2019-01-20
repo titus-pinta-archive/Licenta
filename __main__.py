@@ -7,38 +7,21 @@ import MachineLearning.network
 import Optimizers.gradient_descent
 
 import numpy as np
-
-# p = TestProblems.problem.Problem(lambda x: 0.5 * x ** 2, lambda x: x, 1, optim="GD", eta=0.003)
-# p.solve()
-
-# p = TestProblems.problem.Problem(lambda x: 0.5 * x ** 2, lambda x: x, 1, optim="Polyak", eta=0.003)
-# p.solve()
-
-# p = TestProblems.problem.Problem(lambda x: 0.5 * x ** 2, lambda x: x, 1, optim="ModPolyak", eta=0.003)
-# p.solve()
-
-# p = TestProblems.problem.Problem(lambda x: 0.5 * x ** 2, lambda x: x, 1, optim="Nesterov", eta=0.003)
-# p.solve()
-
-# p = TestProblems.problem.Problem(lambda x: 0.5 * x ** 2, lambda x: x, 1, optim="ModNesterov", eta=0.003)
-# p.solve()
-
-# print(p.result.data["x_min"])
-# print(p.result.data["it"])
+from PIL import Image
 
 
 #appender = DataVizualizer.disp_to_file.DisplayFile("nesterov.sv", print_to_screen_info="iter acc norminf")
 
 mpb = MNIST.mnist_problem.MNISTProblem(eta=0.5, eps=0.75, iter_stop=250, l2_regularization=0.05,
-                                       optim="GD", name="nesterov", disp="print",
+                                       optim="ModNesterov", name="nesterov", disp="print",
                                        disp_info="iter  norminf acc", cond="acc")
 
 print(mpb.optimize())
 mpb.save_network()
 #appender = None
 
-n = MachineLearning.network.Network.load_from_file("nesterov.netsv")
-
+#n = MachineLearning.network.Network.load_from_file("nesterov.netsv")
+n = mpb.net
 
 img = Image.open("Tests/test0.png")
 arr = np.array(img.getdata(), np.uint8).reshape((3, 28, 28))[0].reshape(784, 1) / 255
@@ -87,6 +70,11 @@ print(np.max(np.abs(arr1 - arr2)))
 
 # t = TestProblems.problem.Problem.from_file("nesterov.sv")
 # print(t.result.data)
+
+# TODO early stopping
+# TODO Daemon si python daemon scripting language
+# TODO vezi varianta cu daemon manager si cu salvare la inchidere
+# TODO defineste gradul de incredere
 
 # TODO l1 regularization
 # TODO Restart nesterov 3 metode
